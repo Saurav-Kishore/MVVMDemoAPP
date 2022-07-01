@@ -21,13 +21,15 @@ import java.util.List;
 import static com.example.mvvmdemoapp.util.constants.Constants.NAME_LIST_FRAGMENT_TAG;
 
 public class ListFragment extends Fragment {
-    private final String mType;
+    private String mType;
     private RecyclerView mRecyclerView;
     private ListAdapter mAdapter;
     private ListViewModel mViewModel;
 
+    public ListFragment() {
+    }
+
     public ListFragment(String dataValueType) {
-        super();
         mType = dataValueType;
     }
 
@@ -36,6 +38,9 @@ public class ListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_fragment, container, false);
+        if (savedInstanceState != null) {
+            mType = savedInstanceState.getString("mType");
+        }
         mRecyclerView = view.findViewById(R.id.list);
         RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -64,5 +69,11 @@ public class ListFragment extends Fragment {
 
     public void sortDataByName() {
         mViewModel.sortDataByName();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString("mType", mType);
+        super.onSaveInstanceState(outState);
     }
 }
